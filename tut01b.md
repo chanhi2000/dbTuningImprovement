@@ -11,7 +11,7 @@
 	- 많은 프로세스가 동시에 데이터를 액세스 하기 때문에 사용자 데이터를 보호하는 Lock 과 공유 메모리 영역인 SGA 에 위치한 데이터 구조 액세스를 직렬화 하기 위한 Latch도 필요.
 	- 오라클은 블록 단위로 I/O 하며, DBWR/CKPT 가 주기적으로 캐시-데이터파일 동기화 수행.
 - `Database` : 디스크에 저장된 데이터 집합(Datafile, Redo Log File, Control File...)
-- `Instance` : SGA + Process
+- `Instance` : SGA(_System Global Area_) + Process
 - `Server Process` : 사용자 명령 처리
 	- Dedicated Server Process : 클라이언트를 위한 전용 프로세스, 사용자에게 필요한 서비스 제공 (SQL 파싱, 최적화, 실행, 블록 읽기, 읽은 데이터 정렬, 네트워크 전송)
 	- 스스로 처리하지 못하는 일을 만나면 OS, I/O 서브시스템, Background Process 등에 신호를 보내 대신 일을 처리하도록 요청
