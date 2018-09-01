@@ -83,4 +83,13 @@ DBMS_XPLAN
 10046 Trace
  - parsing: 
  - execute: sql을 실제 수행하는 구간 (DML only)
- - 
+ - fetch: sql을 통해 나온 값을 사용자에게 반환하는 구간
+
+ADVANCED ALLSTATS LAST
+
+
+실행계획 종류
+ - BY INDEX ROWID 
+ - FULL SCAN
+ - BY USER ROWID: 
+ - SAMPLE
