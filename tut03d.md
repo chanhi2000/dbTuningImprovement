@@ -29,6 +29,30 @@ NESTED LOOP
   TABLE ACCESS (BY INDEX ROWID) OF `EMP` (TABLE)
     INDEX (RANGE SCAN) OF `EMP_IDX` (INDEX)
 
+### SORT MERGE JOIN
 
 
+### HASH JOIN
+- Hash area size 관리 중요 (한정적 공간)
+- Hash 함수를 사용
+- 많은 부하 발생 (내부자원 사용이 많음 0)
 
+
+```sql
+select /*+ LEADING(A) FULL(A) FULL(B) USE_HASH(A B) */
+		A.CARD__NO A.CRE_DT, B.STORE_ID, B.AMOUNT
+FROM CARD A, TRX_LIST B
+WHERE A.CARD=NO = B.CARD_NO
+AND A.CRE_DT >= 20160115
+AND B.TRX_DT >= 20160115
+```
+
+### SEMI JOIN
+
+```sql
+select DEPTNO
+from DEPT a
+where EXISTS(select 'X',
+			 from emp B
+			 where a.deptno = b.deptno)
+```
