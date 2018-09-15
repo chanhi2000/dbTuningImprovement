@@ -9,7 +9,7 @@ create table t as
 begin
    dbms_stats.gather_table_stats(user, 'T');
 end;
-/
+
 alter session set statistics_level = 'ALL';
 
 -- paging query example
