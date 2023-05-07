@@ -1,40 +1,40 @@
--- dba³»ºÎ¿¡ À§Ä¡ÇÑ ¸ðµç Å×ÀÌºí Ãâ·Â
+-- dbaë‚´ë¶€ì— ìœ„ì¹˜í•œ ëª¨ë“  í…Œì´ë¸” ì¶œë ¥
 select * from all_tables;
 
--- ÇöÀç Á¢¼Ó µÈ 'hr` À¯Àú°¡ °®°í ÀÖ´Â ¸ðµç Å×ÀÌºí Ãâ·Â
+-- í˜„ìž¬ ì ‘ì† ëœ 'hr` ìœ ì €ê°€ ê°–ê³  ìžˆëŠ” ëª¨ë“  í…Œì´ë¸” ì¶œë ¥
 select * from user_tables;
 
--- ÀüÃ¼ »ç¿ëÀÚ¿¡ ´ëÇÑ Á¤º¸¸¦ °Ë»öÇÒ ¶§ (GRANT ÈÄ ¼­¹ö ÀçÁ¢¼Ó ±ÇÀå)
+-- ì „ì²´ ì‚¬ìš©ìžì— ëŒ€í•œ ì •ë³´ë¥¼ ê²€ìƒ‰í•  ë•Œ (GRANT í›„ ì„œë²„ ìž¬ì ‘ì† ê¶Œìž¥)
 select * from dba_users;
 
  
 /**
-  * ½ÇÁ¦ ½ÇÇà°èÈ¹ ¼³Á¤ set autotrace $PARAMETER
-  * on explain : °èÈ¹¸¸
-  * on statistics : Åë°è¸¸
-  * traceonly explain : °á°úÃâ·Â Á¦¿Ü, °èÈ¹¸¸ 
-  * traceonly statistics : °á°úÃâ·Â Á¦¿Ü, Åë°è¸¸
+  * ì‹¤ì œ ì‹¤í–‰ê³„íš ì„¤ì • set autotrace $PARAMETER
+  * on explain : ê³„íšë§Œ
+  * on statistics : í†µê³„ë§Œ
+  * traceonly explain : ê²°ê³¼ì¶œë ¥ ì œì™¸, ê³„íšë§Œ 
+  * traceonly statistics : ê²°ê³¼ì¶œë ¥ ì œì™¸, í†µê³„ë§Œ
 */
 
 set autotrace on explain;
 select * from DEPARTMENTS;
 
--- ¿¹»ó ½ÇÇà°èÈ¹È®ÀÎ
+-- ì˜ˆìƒ ì‹¤í–‰ê³„íší™•ì¸
 explain plan for
 select * from DEPARTMENTS;
 select * from table(DBMS_XPLAN.DISPLAY);
 
--- ¿¹»ó ½ÇÇà°èÈ¹È®ÀÎ  
+-- ì˜ˆìƒ ì‹¤í–‰ê³„íší™•ì¸  
 SELECT * 
   FROM TABLE(DBMS_XPLAN.DISPLAY(NULL, NULL, 'ADVANCED LAST'));
 
--- ½ÇÁ¦ ½ÇÇà°èÈ¹È®ÀÎ
+-- ì‹¤ì œ ì‹¤í–‰ê³„íší™•ì¸
 SELECT * 
   FROM TABLE(DBMS_XPLAN.DISPLAY_CURSOR(NULL, NULL, 'ADVANCED LAST'));
 
 /** 
- * SQL Äõ¸® Åë°è °ü·Ã Á¶È¸
- * °ü·Ã¸µÅ©: https://docs.oracle.com/cd/B19306_01/server.102/b14237/dynviews_2113.htm
+ * SQL ì¿¼ë¦¬ í†µê³„ ê´€ë ¨ ì¡°íšŒ
+ * ê´€ë ¨ë§í¬: https://docs.oracle.com/cd/B19306_01/server.102/b14237/dynviews_2113.htm
  */
 SELECT /* HNJ */ * from DEPARTMENTS;
 SELECT SQL_ID, CHILD_NUMBER, SQL_TEXT
@@ -49,7 +49,7 @@ SELECT * FROM V$SQLAREA;
 
 show parameter block;
 
--- ROWID¸¦ »ç¿ëÇÒ µ¥ÀÌÅ¸ ÃßÀû
+-- ROWIDë¥¼ ì‚¬ìš©í•  ë°ì´íƒ€ ì¶”ì 
 SELECT *
   FROM user_objects;
   
@@ -57,14 +57,14 @@ select A.*, ROWID
   FROM DEPARTMENTS A;
   
 /** 
-  * È°¿ë01 : Áßº¹µ¥ÀÌÅÍ Á¦°Å
+  * í™œìš©01 : ì¤‘ë³µë°ì´í„° ì œê±°
   */
--- ½ÇÁ¸ Å×ÀÌºí È®ÀÎ
+-- ì‹¤ì¡´ í…Œì´ë¸” í™•ì¸
 SELECT *
   FROM ALL_TABLES
  WHERE OWNER = 'SCOTT';
 
--- Å×ÀÌºí º¹Á¦1
+-- í…Œì´ë¸” ë³µì œ1
 CREATE TABLE HR.EMPT_T AS 
 SELECT * 
   FROM SCOTT.EMP;
@@ -72,13 +72,13 @@ SELECT *
 INSERT INTO EMPT_T
 SELECT *
   FROM SCOTT.EMP;
--- »óÅÂ ÀúÀå
+-- ìƒíƒœ ì €ìž¥
 COMMIT;
   
 SELECT COUNT(*) FROM SCOTT.EMP;
 SELECT COUNT(*) FROM HR.EMPT_T;
 
--- scott.emp Å×ÀÌºí ÀÎµ¦½º ¼Ó¼º È®ÀÎ
+-- scott.emp í…Œì´ë¸” ì¸ë±ìŠ¤ ì†ì„± í™•ì¸
 SELECT *
   FROM ALL_INDEXES
   WHERE OWNER = 'SCOTT'
@@ -90,10 +90,10 @@ SELECT *
    AND INDEX_NAME = 'PK_EMP';  
 
 
--- °íÀ¯ ÀÎµ¦½º »ý¼º (¿À·ù: ÀÌ¹Ì UNIQUEÇÏ±â ¶§¹®¿¡ Áßº¹ÀÌ »ý±è)
+-- ê³ ìœ  ì¸ë±ìŠ¤ ìƒì„± (ì˜¤ë¥˜: ì´ë¯¸ UNIQUEí•˜ê¸° ë•Œë¬¸ì— ì¤‘ë³µì´ ìƒê¹€)
 
 
--- Áßº¹µ¥ÀÌÅÍ È®ÀÎ / »èÁ¦
+-- ì¤‘ë³µë°ì´í„° í™•ì¸ / ì‚­ì œ
   select *
   -- DELETE
     from HR.EMPT_T
@@ -107,7 +107,7 @@ SELECT SQL_ID, CHILD_NUMBER, SQL_TEXT
 SELECT * 
   FROM TABLE(DBMS_XPLAN.DISPLAY_CURSOR('6r73uhg4xbd06', 0, 'ADVANCED LAST'));
 
--- ÀÎµ¦½º »ý¼º
+-- ì¸ë±ìŠ¤ ìƒì„±
 CREATE UNIQUE INDEX HR.PK_EMPT_T ON HR.EMPT_T(EMPNO);
 
 SELECT *
@@ -120,7 +120,7 @@ SELECT *
  WHERE INDEX_OWNER = 'SCOTT'
    AND INDEX_NAME = 'PK_EMP';  
 
--- È°¿ë : Merge Into È°¿ë
+-- í™œìš© : Merge Into í™œìš©
 ALTER TABLE EMPT_T ADD (DEPTNO_TMP VARCHAR2(10));
 ALTER TABLE EMPT_T DROP COLUMN DEPTNO_TMP;
 
@@ -129,7 +129,7 @@ INSERT INTO EMPT_T
 SELECT * FROM SCOTT.EMP;
 COMMIT;
 
--- ¸ÓÂ¡ ÀÛ¾÷
+-- ë¨¸ì§• ìž‘ì—…
 MERGE INTO HR.EMPT_T
 USING (SELECT ROWID AS RID
        FROM HR.EMPT_T
@@ -149,7 +149,7 @@ SELECT /*+ INDEX_DESC(T EMPT_T_PK) */ *
  WHERE EMPNO = 7521;
 
 
--- º´·Ä Ã³¸®
+-- ë³‘ë ¬ ì²˜ë¦¬
 SELECT /*+ PARALLEL(T 4) INDEX_FFS(A EMPT_T_PK) */ * 
   FROM EMPT_T T;
 
@@ -166,10 +166,10 @@ on t(object_id);
 create index t_object_name_idx 
 on t(object_name);
 
--- Åë°èÁ¤º¸ »ý¼º
+-- í†µê³„ì •ë³´ ìƒì„±
 exec dbms_stats.gather_table_stats(user, 'T');
 
--- CLUSTERING FACTOR°¡ ÀÛÀ»¼ö·Ï ÁÁÀº ¼öÄ¡
+-- CLUSTERING FACTORê°€ ìž‘ì„ìˆ˜ë¡ ì¢‹ì€ ìˆ˜ì¹˜
 select i.index_name, t.blocks table_blocks, i.num_rows, i.clustering_factor
 from   user_tables t, user_indexes i
 where t.table_name = 'T'

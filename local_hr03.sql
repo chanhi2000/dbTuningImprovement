@@ -1,13 +1,12 @@
-
 select /*+ INDEX(idx_col1) */ *
   from hr.empt_t;
   
-/* ½Ç½À 01A */  
--- ÀÓ½ÃÅ×ÀÌºí »ý¼º
+/* ì‹¤ìŠµ 01A */  
+-- ìž„ì‹œí…Œì´ë¸” ìƒì„±
 DROP TABLE emp_t;
 CREATE TABLE emp_t AS (SELECT * FROM scott.emp);
 
--- ÀÎµ¦½º »ý¼º (»ý¼ºµÉ ¤¨¤À Åë°èÁ¤º¸°¡ Ç×»ó »ý¼º)
+-- ì¸ë±ìŠ¤ ìƒì„± (ìƒì„±ë  ã„¸ã… í†µê³„ì •ë³´ê°€ í•­ìƒ ìƒì„±)
 CREATE INDEX EMP_T_IDX ON EMP_T(ENAME,SAL);
 CREATE INDEX DEPTNO_IDX ON EMP_T(DEPTNO);
 CREATE INDEX EMP_SALNAME_IDX ON EMP_T(SAL,ENAME);
@@ -18,21 +17,21 @@ SELECT *
   FROM EMP_T
  WHERE DEPTNO=20;
 
--- INDEX FULL SCAN (¼ÒÆ®Á¦°Å) À¯µµ
+-- INDEX FULL SCAN (ì†ŒíŠ¸ì œê±°) ìœ ë„
 SELECT *
   FROM EMP_T
  WHERE SAL > 2000
 ORDER BY ENAME;
--- `CREATE INDEX EMP_T_IDX ON EMP_T(ENAME,SAL)` ÀÌ ÀÎµ¦½º´Â À§ÀÇ Äõ¸®¿¡ ÀûÇÕÇÏÁö ¾Ê´Ù.
+-- `CREATE INDEX EMP_T_IDX ON EMP_T(ENAME,SAL)` ì´ ì¸ë±ìŠ¤ëŠ” ìœ„ì˜ ì¿¼ë¦¬ì— ì í•©í•˜ì§€ ì•Šë‹¤.
 
--- FULL SCAN À» ÇÑ¹ø ÇÏ°í SORTÀ» ÇÏ±â¶§¹®¿¡ ³¶ºñ°¡ ¸¹´Ù.
+-- FULL SCAN ì„ í•œë²ˆ í•˜ê³  SORTì„ í•˜ê¸°ë•Œë¬¸ì— ë‚­ë¹„ê°€ ë§Žë‹¤.
 SELECT /*+ INDEX(EMP_T EMP_SALNAME_INDEX) */ 
         *
 FROM EMP_T
-WHERE ROWNUM <= 5 --»óÀ§ 5°Ç
+WHERE ROWNUM <= 5 --ìƒìœ„ 5ê±´
 ORDER BY ENAME;
 
--- ½ÇÇà°èÈ¹È®ÀÎ
+-- ì‹¤í–‰ê³„íší™•ì¸
 -- SELECT * FROM TABLE( DBMS_XPLAN.DISPLAY_CURSOR( null, null, 'ALLSTATS LAST')  );
 
 ALTER TABLE EMP_T MODIFY ENAME NOT NULL;
@@ -45,7 +44,7 @@ SELECT *
   WHERE ROWNUM <= 5
 
 
--- ½Ç½À 1B: ¾Æ·¡ SQLÀ» È®ÀÎÇÏ°í ÀûÀýÇÑ ÀÎµ¦½º¸¦ ¼³°èÇÏ½Ã¿À
+-- ì‹¤ìŠµ 1B: ì•„ëž˜ SQLì„ í™•ì¸í•˜ê³  ì ì ˆí•œ ì¸ë±ìŠ¤ë¥¼ ì„¤ê³„í•˜ì‹œì˜¤
 CREATE INDEX EMP_JOB_DEPTNO_IDX ON EMP_T(JOB, DEPTNO);
 SELECT DEPTNO
  FROM EMP
@@ -68,8 +67,8 @@ WHERE JOB IN ('CLERK', 'SALARY')
 GROUP BY JOB, SUBSTR(DEPTNO, 1, 10);
 
  
--- ½Ç½À 1C:
--- 1. Å×½ºÆ® Å×ÀÌºí »ý¼º
+-- ì‹¤ìŠµ 1C:
+-- 1. í…ŒìŠ¤íŠ¸ í…Œì´ë¸” ìƒì„±
 CREATE TABLE BIG_TABLE as SELECT * 
                           FROM dba_tables, 
                           (SELECT LEVEL 
@@ -86,10 +85,10 @@ WHERE OWNER = 'SYSTEM'
 ORDER BY TABLE_NAME DESC;
 
 
--- trace file ±¸ºÐÀ» À§ÇÑ identifier Àû¿ë
+-- trace file êµ¬ë¶„ì„ ìœ„í•œ identifier ì ìš©
 ALTER SESSION SET tracefile_identifier ='hnj';
 
--- trace »ý¼ºÆÄÀÏ È®ÀÎ
+-- trace ìƒì„±íŒŒì¼ í™•ì¸
 SELECT r.value || '/' || LOWER(t.instance_name) || '_ora_'
       || ltrim(to_char(p.spid)) || '_hnj'||'.trc' trace_file
   FROM v$process p, v$session s, v$parameter r, v$instance t
@@ -99,8 +98,8 @@ SELECT r.value || '/' || LOWER(t.instance_name) || '_ora_'
                   FROM v$mystat 
                  WHERE rownum = 1)
 
--- ¼¼¼Ç¿¡ trace Àû¿ë
-ALTER SESSION SET EVENTS '10046 trace name context forever, level 12' ; -- level 12·Î »ý¼º
+-- ì„¸ì…˜ì— trace ì ìš©
+ALTER SESSION SET EVENTS '10046 trace name context forever, level 12' ; -- level 12ë¡œ ìƒì„±
 ALTER SESSION SET STATISTICS_LEVEL = 'all';
 
 SELECT /*+ hnj1 */ /*+ INDEX_DESC(A BIG_TABLE_IDX1)*/ *
@@ -110,7 +109,7 @@ SELECT /*+ hnj1 */ /*+ INDEX_DESC(A BIG_TABLE_IDX1)*/ *
    AND TABLE_NAME LIKE 'REPCAT$%'
  ORDER BY TABLE_NAME;
 
--- ¹®Á¦: ÀÎµ¦½º¸¦ ¸¸µé¾î º¸ÀÚ
+-- ë¬¸ì œ: ì¸ë±ìŠ¤ë¥¼ ë§Œë“¤ì–´ ë³´ìž
 CREATE INDEX BIG_TABLE_IDX1 ON BIG_TABLE(TABLE_NAME DESC);          -- FUNCTION-BASED INDEX
 CREATE INDEX BIG_TABLE_IDX2 ON BIG_TABLE(OWNER, TABLESPACE_NAME, TABLE_NAME DESC);
 
@@ -118,7 +117,7 @@ SELECT * FROM TABLE(  DBMS_XPLAN.DISPLAY_CURSOR(null, null, 'ALLSTATS LAST')  );
 
 WHERE _SQL_
 
--- ¼¼¼Ç¿¡ trace off
+-- ì„¸ì…˜ì— trace off
 ALTER SESSION SET EVENTS '10046 trace name context forever, off';
 
 CREATE INDEX SCOTT.DEPT_IDX1 ON SCOTT.DEPT(LOC);
@@ -144,7 +143,7 @@ SELECT /*+ */ A.DNAME, B.ENAME, B.SAL
    AND A.LOC = 'DALLAS';   
 
 
--- ½Ç½À 5:
+-- ì‹¤ìŠµ 5:
 DESC DBA_IND_COLUMNS;
 DESC DBA_TABLES;
 DESC DBA_INDEXES;
